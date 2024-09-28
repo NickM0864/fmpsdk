@@ -8,6 +8,7 @@ API_KEY = os.getenv('FMP_API_KEY')
 
 def income_statement_growth(
     symbol: str,
+    period: str = "quarter",
     limit: int = DEFAULT_LIMIT,
     output: str = 'markdown',
     precision: typing.Optional[int] = 5
@@ -19,6 +20,7 @@ def income_statement_growth(
     financial performance and identifying growth patterns.
 
     :param symbol: Company ticker (e.g., 'AAPL').
+    :param period: Reporting period ('annual' or 'quarter'). Default is 'quarter'.
     :param limit: Number of records to retrieve. Default is DEFAULT_LIMIT.
     :param output: Output format ('tsv', 'json', or 'markdown'). Defaults to 'markdown'.
     :param precision: Decimal places for rounding. None for full precision.
@@ -26,7 +28,7 @@ def income_statement_growth(
     :example: income_statement_growth('AAPL', limit=5, precision=3)
     """
     path = f"income-statement-growth/{symbol}"
-    query_vars = {"apikey": API_KEY, "limit": limit}
+    query_vars = {"apikey": API_KEY, "limit": limit, "period": __validate_period(value=period)}
     result = __return_json_v3(path=path, query_vars=query_vars)
     
     if result:
